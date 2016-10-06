@@ -15,7 +15,7 @@ defmodule Slack.Rtm do
             Slack API returned non-JSON output: #{inspect response.body, pretty: true}
             HTTPoison returned: #{inspect error, pretty: true}
             """)
-            raise RuntimeError, message: "Slack API returned non-JSON output"
+            raise RuntimeError, message: "Slack API returned non-JSON output\n#{inspect response.body, pretty: true}"
         end
       {:error, reason} -> {:error, reason}
     end
