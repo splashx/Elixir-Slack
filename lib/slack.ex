@@ -142,7 +142,7 @@ defmodule Slack do
 
       def websocket_handle({:text, message}, _conn, slack) do
         message = prepare_message message
-
+        slack = Slack.State.update(message, slack)
         slack = if Map.has_key?(message, :type) do
           try do
             handle_message(message, slack)
@@ -150,8 +150,6 @@ defmodule Slack do
           rescue
             e -> handle_exception(e)
           end
-
-          Slack.State.update(message, slack)
         else
           slack
         end
