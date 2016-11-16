@@ -137,7 +137,15 @@ defmodule Slack do
       end
 
       def websocket_handle({:ping, data}, _conn, state) do
-        {:reply, {:pong, data}, state}
+        # If websocket watchdog timer isn't nil then cancel the timer
+        # first
+        if state.ws_watchdog != nil do
+          :timer.cancel(state.ws_watchdog)
+        end
+        # Create a timer to kill this process if we don't get a websocket ping
+        # within 90 secs
+        {:ok, tref} = :timer.exit_after(90000, :websocket_heartbeat_failure)
+        {:reply, {:pong, data}, Slack.State.update(:ws_watchdog, tref, state)}
       end
 
       def websocket_handle({:text, message}, _conn, slack) do

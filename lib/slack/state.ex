@@ -17,7 +17,8 @@ defmodule Slack.State do
     :channels,
     :groups,
     :users,
-    :ims
+    :ims,
+    :ws_watchdog
   ]
 
   @doc """
@@ -98,4 +99,9 @@ defmodule Slack.State do
   def update(%{type: _type}, slack) do
     slack
   end
+
+  def update(:ws_watchdog, tref, slack) do
+    put_in(slack, [:ws_watchdog], tref)
+  end
+
 end
