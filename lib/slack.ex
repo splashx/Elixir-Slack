@@ -111,7 +111,6 @@ defmodule Slack do
         }
 
         handle_connect(slack)
-        {:ok, slack}
       end
 
       def websocket_info(:start, _connection, state) do
@@ -124,8 +123,6 @@ defmodule Slack do
         rescue
           e -> handle_exception(e)
         end
-
-        {:ok, slack}
       end
 
       def websocket_terminate(reason, _conn, slack) do
@@ -153,7 +150,7 @@ defmodule Slack do
         slack = Slack.State.update(message, slack)
         slack = if Map.has_key?(message, :type) do
           try do
-            handle_message(message, slack)
+            {:ok, slack} = handle_message(message, slack)
             slack
           rescue
             e -> handle_exception(e)
@@ -185,10 +182,10 @@ defmodule Slack do
         raise message
       end
 
-      def handle_connect(_slack ), do: :ok
-      def handle_message(_message, _slack), do: :ok
-      def handle_close(_reason, _slack), do: :ok
-      def handle_info(_message, _slack), do: :ok
+      def handle_connect(slack ), do: {:ok, slack}
+      def handle_message(_message, slack), do: {:ok, slack}
+      def handle_close(_reason, slack), do: {:ok, slack}
+      def handle_info(_message, slack), do: {:ok, slack}
 
       defoverridable [handle_connect: 1, handle_message: 2, handle_close: 2, handle_info: 2]
     end
