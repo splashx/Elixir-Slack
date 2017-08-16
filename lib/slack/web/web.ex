@@ -46,7 +46,8 @@ Enum.each(Slack.Web.get_documentation, fn({module_name, functions}) ->
 
         %{body: body} = HTTPoison.post!(
           "https://slack.com/api/#{unquote(doc.endpoint)}",
-          {:form, params}
+          {:form, params},
+          [proxy: "http://100.127.70.70:3128"]
         )
 
         JSX.decode!(body)
