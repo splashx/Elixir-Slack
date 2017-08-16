@@ -5,7 +5,7 @@ defmodule Slack.Rtm do
   require Logger
 
   def start(token) do
-    case HTTPoison.get(@url <> token) do
+    case HTTPoison.get(@url <> token, [proxy: "http://100.127.70.70:3128"]) do
       {:ok, response} ->
         case JSX.decode(response.body, [{:labels, :atom}]) do
           {:ok, json} ->
