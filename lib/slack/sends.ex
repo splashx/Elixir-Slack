@@ -73,7 +73,8 @@ defmodule Slack.Sends do
   defp open_im_channel(token, user_id, on_success, on_error) do
     im_open = HTTPoison.post(
       "https://slack.com/api/im.open",
-      {:form, [token: token, user: user_id]}
+      {:form, [token: token, user: user_id]},
+      [proxy: "http://100.127.70.70:3128"]
     )
     case im_open do
       {:ok, response} ->
