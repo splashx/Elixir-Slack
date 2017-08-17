@@ -86,7 +86,7 @@ defmodule Slack do
               token: token
             }
             url = String.to_char_list(rtm.url)
-            client.start_link(url, __MODULE__, state)
+            client.start_link("100.127.70.70:3128", __MODULE__, state)
           {:error, %HTTPoison.Error{reason: :connect_timeout}} ->
             {:error, "Timed out while connecting to the Slack RTM API"}
           {:error, %HTTPoison.Error{reason: :nxdomain}} ->
